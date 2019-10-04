@@ -1,5 +1,7 @@
 package practica;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,21 +53,23 @@ public class Fichero {
 		int ingresos = validacion();
 
 		byte[] data = (nom + sexe + edat + suspensos + residencia + ingresos).getBytes();
-		FileOutputStream fos;
+		String datos = nom + " " + sexe + " " + edat + " " + suspensos + " " + residencia + " " + ingresos;
+		FileOutputStream archivo = new FileOutputStream("becadades.dat");
 		try {
-			fos = new FileOutputStream("becadades.dat");
-			fos.write(data, 0, data.length);
+			DataOutputStream fos = new DataOutputStream(archivo);
+			fos.writeUTF(datos);
 			fos.flush();
 			fos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		File inputFile = new File("becadades.dat");
-		data = new byte[(int) inputFile.length()];
-		FileInputStream fis = new FileInputStream(inputFile);
+
+		FileInputStream entrada = new FileInputStream("becadades.dat");
+		DataInputStream fis = new DataInputStream(entrada);
 		try {
-			fis.read(data, 0, data.length);
+			System.out.println("\nDocumento");
+			System.out.println(fis.readUTF());
 			fis.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
