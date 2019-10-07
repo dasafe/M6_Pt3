@@ -2,7 +2,6 @@ package practica;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +13,8 @@ public class Fichero {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
+		
+		//Genera el formulario y validaciones
 		System.out.println("Nom i Cognom:");
 		String nom = reader.nextLine();
 		String sexe;
@@ -51,9 +52,11 @@ public class Fichero {
 		} while (!(residencia.equalsIgnoreCase("SI") || residencia.equalsIgnoreCase("NO")));
 		System.out.println("Ingressos anuals de la família:");
 		int ingresos = validacion();
-
-		byte[] data = (nom + sexe + edat + suspensos + residencia + ingresos).getBytes();
+		
+		//Recoge los datos y los separa por comas
 		String datos = nom + "," + sexe + "," + edat + "," + suspensos + "," + residencia + "," + ingresos;
+		
+		//Crea el archivo con los datos
 		FileOutputStream archivo = new FileOutputStream("becadades.dat");
 		try {
 			DataOutputStream fos = new DataOutputStream(archivo);
@@ -65,21 +68,39 @@ public class Fichero {
 			e.printStackTrace();
 		}
 
+		//Lee los datos y los presenta
 		FileInputStream entrada = new FileInputStream("becadades.dat");
 		DataInputStream fis = new DataInputStream(entrada);
+		String[] arrayDatos = new String[0];
 		try {
+			arrayDatos = fis.readUTF().split(",");
 			System.out.println("\nDocumento");
-			String[] arrayDatos = fis.readUTF().split(",");
 			System.out.printf(
-					"Nom y Cognom: %s\nSexe: %s\nEdat: %s\nNumero de suspensos del curs anterior:  %s\nResidencia familiar: %s\nIngressos anuals de la familia: %s",
+					"Nom y Cognom: %s\nSexe: %s\nEdat: %s\nNumero de suspensos del curs anterior:  %s\nResidencia familiar: %s\nIngressos anuals de la familia: %s\n",
 					arrayDatos[0], arrayDatos[1], arrayDatos[2], arrayDatos[3], arrayDatos[4], arrayDatos[5]);
 			fis.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		//Genera backup
+		FileOutputStream backup = new FileOutputStream("becadadesBK.dat");
+		DataOutputStream fos = new DataOutputStream(backup);
+		try {
+			for (int i = 0; i < arrayDatos.length; i++) {
+				fos.writeUTF(arrayDatos[i]);
+			}
+			fos.flush();
+			fos.close();
+			System.out.println("\nBackup creado");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
+	//Valida que sea un integer
 	private static int validacion() {
 		while (!reader.hasNextInt()) {
 			reader.next();
