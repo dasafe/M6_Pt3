@@ -69,7 +69,10 @@ public class Fichero {
 		DataInputStream fis = new DataInputStream(entrada);
 		try {
 			System.out.println("\nDocumento");
-			System.out.println(fis.readUTF());
+			String[] arrayDatos = fis.readUTF().split(" ");
+			System.out.printf(
+					"Nom y Cognom: %s\nSexe: %s\nEdat: %s\nNumero de suspensos del curs anterior:  %s\nResidencia familiar: %s\nIngressos anuals de la familia: %s",
+					arrayDatos[0], arrayDatos[1], arrayDatos[2], arrayDatos[3], arrayDatos[4], arrayDatos[5]);
 			fis.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
